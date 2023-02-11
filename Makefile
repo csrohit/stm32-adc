@@ -1,4 +1,5 @@
 TARGET := adc
+
 # debug build?Release
 BUILD_TYPE = Release
 BUILD_DIR:= build
@@ -20,8 +21,7 @@ CFLAGS += -g -gdwarf-2
 endif
 
 # Generate dependency information
-CFLAGS += -MMD -MP 
-ASLAGS += -MMD -MP 
+CFLAGS += -MMD -MP
 
 SRC_DIR := src
 SRCS := $(shell find $(SRC_DIR) -name '*.c')
@@ -39,7 +39,7 @@ $(BUILD_DIR)/%.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo "CC " $< " ==> " $@
 
-flash:
+flash: $(BUILD_DIR)/$(TARGET).bin
 	st-flash write $(BUILD_DIR)/$(TARGET).bin 0x8000000
 
 all: $(BUILD_DIR)/$(TARGET).bin

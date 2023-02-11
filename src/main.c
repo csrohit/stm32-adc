@@ -46,11 +46,44 @@ void init_clock(void)
 	SystemCoreClock = 72000000;
 }
 
+void init_adc(void){
+	// ADC clock should be <= 14MHz so divided PCLK2 (72MHz) by 6
+	RCC->CFGR |= RCC_CFGR_ADCPRE_DIV6;	// adc_clk = 12MHz
+	RCC->APB2ENR |= RCC_APB2ENR_ADC1EN | RCC_APB2ENR_IOPAEN;
+
+	// set PA0 to analog input mode
+	GPIOA->CRL &= ~(GPIO_CRL_CNF0 | GPIO_CRL_MODE0);
+
+    // set sample time for ch 0 to 28.5 cycles (0b011)
+    ADC1->SMPR2 |= ( ADC_SMPR2_SMP0_1 | ADC_SMPR2_SMP0_0);
+    
+    // ADC1->SQR1 L[3:0] = 0b0000 at reset; set for 1 conversion
+    // ADC1->SQR3 SQ1[4:0] = 0b00000 at reset; 1st conversion = chan 0
+    
+    // put ADC1 into continuous mode and turn on ADC
+    ADC1->CR2 |= (ADC_CR2_CONT | ADC_CR2_ADON);
+
+	ADC1->CR2 &= ~ADC_CR2_ALIGN;	// right alignment
+    
+    // reset calibration registers
+    ADC1->CR2 |= (ADC_CR2_RSTCAL);
+    while(ADC1->CR2 & ADC_CR2_RSTCAL);
+    
+    // enable calibration
+    ADC1->CR2 |= (ADC_CR2_CAL);
+    while(ADC1->CR2 & ADC_CR2_CAL);
+    
+    // not concerned about power consumption, just start the continuous
+    // conversions and will read the DR periodically
+    
+    // start conversions
+    ADC1->CR2 |= ADC_CR2_ADON;
+}
+
 int main(void)
 {
-
 	init_clock();
-
+	init_adc();
 	USART1_init(9600U);
 
 	int ret = SysTick_Config(SystemCoreClock / 1000);
@@ -60,8 +93,9 @@ int main(void)
 
 	while (1)
 	{
-		sprintf_(msg, "Time elapsed: %lu ms\r\n", msTicks);
+		uint16_t adc_value = ADC1->DR;
+		sprintf_(msg, "Digital value: %hu\r\n", adc_value);
 		USART1_puts(msg);
-		delay(5000U);
+		delay(10U);
 	}
 }

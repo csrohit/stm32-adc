@@ -1,2 +1,3 @@
 build
 .cortex-debug*
+.DS_Store
