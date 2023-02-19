@@ -40,7 +40,7 @@ static inline void USART1_init(uint32_t baudrate)
  * 
  * @param c character to be transmitted
  */
-void USART1_putch(char c);
+void USART1_putc(char c);
 
 /**
  * @brief Transmit string 

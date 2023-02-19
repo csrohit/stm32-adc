@@ -16,10 +16,11 @@
 
 #include <stdint.h>
 
-#include <printf.h>
-#include <stm32f1xx.h>
-#include <timer.h>
-#include <uart.h>
+#include "printf.h"
+#include "stm32f1xx.h"
+#include "timer.h"
+#include "uart.h"
+#include "main.h"
 
 /**
  * @brief

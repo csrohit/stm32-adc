@@ -18,5 +18,6 @@
 
 #define __MAIN_H__
 int main(void);
-
+void init_clock(void);
+void init_adc(void);
 #endif
