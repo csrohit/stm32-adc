@@ -1,4 +1,4 @@
-# ADC intercing of STM32 Blue Pill in Baremetal Embedded C
+# ADC interfacing of STM32 Blue Pill in Baremetal Embedded C
 
 Read value from analog sensor connected to Channel0 of ADC1 on pin PA0 in continuous mode. Transmit the sensor value read to USART1. This project does not require any IDE like CubeIde, any text editor will work including notepad and vim. For better debugging experience, VSCode is preferred.
 
