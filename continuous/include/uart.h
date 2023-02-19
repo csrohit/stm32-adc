@@ -7,7 +7,7 @@ extern uint32_t SystemCoreClock;
 
 /**
  * @brief Initialize USART1 peripheral
- * 
+ *
  * @param baudrate baudrate to be configurate
  */
 static inline void USART1_init(uint32_t baudrate)
@@ -37,23 +37,22 @@ static inline void USART1_init(uint32_t baudrate)
 
 /**
  * @brief Transmit 1 character
- * 
+ *
  * @param c character to be transmitted
  */
 void USART1_putc(char c);
 
 /**
- * @brief Transmit string 
- * 
+ * @brief Transmit string
+ *
  * @param str pointer to the string
  */
 void USART1_puts(const char *str);
 
 /**
  * @brief Interrupt service routine for USART1 related interrupts
- * 
+ *
  */
 void USART1_IRQHandler(void);
-
 
 #endif

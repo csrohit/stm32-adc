@@ -1,4 +1,4 @@
-#include<stdint.h>
+#include <stdint.h>
 
 #ifndef __TIMER_H__
 #define __TIMER_H__
@@ -9,13 +9,11 @@
  */
 static volatile uint32_t msTicks;
 
-
 /**
  * @brief Add blocking delay
  * @param ms delay in milliseconds
  */
 void delay(uint32_t ms);
-
 
 /**
  * @brief
