@@ -1,56 +1,104 @@
+/**
+ * @file stm32f1.ld
+ * @author Rohit Nimkar (nehalnimkar@gmail.com)
+ * @brief Linker script for stm32f103c8t6 micro-controller
+ * @version 1.2
+ * @date 2022-12-07
+ * 
+ * @copyright Copyright (c) 2022
+ * @attention
+ * 
+ * This software component is licensed by Rohit Nimkar under BSD 3-Clause license,
+ * the "License"; You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at: opensource.org/licenses/BSD-3-Clause
+ *
+ */
+
+/* Entry Point */
 ENTRY(Reset_Handler)
 
+/* Highest address of the user mode stack */
+_stack_top = ORIGIN(RAM) + LENGTH(RAM); /* end of "RAM" Ram type memory */
+
+/* Memories definition */
 MEMORY
 {
-  FLASH(rx):ORIGIN =0x08000000,LENGTH =64K
-  SRAM(rwx):ORIGIN =0x20000000,LENGTH =20K
+  RAM     (xrw)   : ORIGIN = 0x20000000,   LENGTH = 20K
+  FLASH   (rx)    : ORIGIN = 0x8000000,   LENGTH = 64K
 }
 
+/* Sections */
 SECTIONS
 {
-
-.isr_vector :
+  /* The startup code into "FLASH" Rom type memory */
+  .isr_vector :
   {
-    *(.isr_vector)
     . = ALIGN(4);
-  }> FLASH
+    KEEP(*(.isr_vector)) /* Startup code */
+    . = ALIGN(4);
+  } >FLASH
 
+  /* The program code and other data into "FLASH" Rom type memory */
   .text :
   {
-    *(.text)
-    *(.text.*)
-    *(.init)
-    *(.fini)
-    *(.rodata)
-    *(.rodata.*)
     . = ALIGN(4);
-    _etext = .;
-  }> FLASH
+    *(.text)           /* .text sections (code) */
+    *(.text*)          /* .text* sections (code) */
 
+    KEEP (*(.init))
+    KEEP (*(.fini))
+
+    . = ALIGN(4);
+    _etext = .;        /* define a global symbols at end of code */
+  } >FLASH
+
+  /* Constant data into "FLASH" Rom type memory */
+  .rodata :
+  {
+    . = ALIGN(4);
+    *(.rodata)         /* .rodata sections (constants, strings, etc.) */
+    *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
+    . = ALIGN(4);
+  } >FLASH
+
+  /* Used by the startup to initialize data */
   _la_data = LOADADDR(.data);
 
+  /* Initialized data sections into "RAM" Ram type memory */
   .data :
   {
-    _sdata = .;
-    *(.data)
-    *(.data.*)
     . = ALIGN(4);
-    _edata = .;
-  }> SRAM AT> FLASH
+    _sdata = .;        /* create a global symbol at data start */
+    *(.data)           /* .data sections */
+    *(.data*)          /* .data* sections */
 
+    . = ALIGN(4);
+    _edata = .;        /* define a global symbol at data end */
+
+  } >RAM AT> FLASH
+
+  /* Uninitialized data section into "RAM" Ram type memory */
+  . = ALIGN(4);
   .bss :
   {
-    _sbss = .;
+    /* This is used by the startup in order to initialize the .bss section */
+    _sbss = .;         /* define a global symbol at bss start */
     __bss_start__ = _sbss;
     *(.bss)
-    *(.bss.*)
+    *(.bss*)
     *(COMMON)
+
     . = ALIGN(4);
-    _ebss = .;
+    _ebss = .;         /* define a global symbol at bss end */
     __bss_end__ = _ebss;
-     . = ALIGN(4);
-    end = .;
-    __end__ = .;
-  }> SRAM
-  PROVIDE(_stack_top = ORIGIN(SRAM) + LENGTH(SRAM));
+  } >RAM
+
+  /* Remove information from the compiler libraries */
+  /DISCARD/ :
+  {
+    libc.a ( * )
+    libm.a ( * )
+    libgcc.a ( * )
+  }
+
 }

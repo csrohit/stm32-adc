@@ -1,5 +1,5 @@
 /**
- * @file usart.hpp
+ * @file usart.h
  * @author Rohit Nimkar (nehalnimkar@gmail.com)
  * @brief Declaration of functionality related to USART
  * @version 1.2
@@ -16,8 +16,10 @@
 
 #include <stdlib.h>
 #include <stm32f1xx.h>
-#include <system.hpp>
-#pragma once
+#include <system.h>
+
+#ifndef __USART_H__
+#define __USART_H__
 
 class USART
 {
@@ -27,7 +29,7 @@ public:
         Usart1 = USART1_BASE,
         Usart2 = USART2_BASE,
         Usart3 = USART3_BASE
-    };
+    } usart_t;
 
     enum Parity : uint8_t
     {
@@ -160,7 +162,7 @@ private:
 public:
     USART()
     {
-        if (this == reinterpret_cast<USART *>(Usart1))
+        if (this == reinterpret_cast<USART *>(USART1))
         {
             // enable clock for GPIOA and USART1
             RCC->APB2ENR |= RCC_APB2ENR_USART1EN | RCC_APB2ENR_IOPAEN;
@@ -176,22 +178,13 @@ public:
         }
     }
 
-    ~USART()
-    {
-        if (this == reinterpret_cast<USART *>(Usart1))
-        {
-            // disable clock for USART1 peripheral
-            RCC->APB2ENR &= ~RCC_APB2ENR_USART1EN;
-        }
-    }
-
     /**
      * @brief Get reference to a USART instance
      *
      * @param usart required hardware usart instance
      * @return void* pointer to the USART object
      */
-    void *operator new(size_t, UsartInstance usart)
+    void *operator new(size_t, usart_t usart)
     {
         return reinterpret_cast<void *>(usart);
     }
@@ -334,7 +327,7 @@ public:
      */
     inline void set_baudrate(baud_rate_t baudrate)
     {
-        uint32_t baud = (uint32_t)(Core::clock / baudrate);
+        uint32_t baud = Core::clock / baudrate;
         BRR = baud;
     }
 
@@ -681,6 +674,9 @@ public:
     {
         while (!(SR & USART_SR_RXNE))
             ;
-        return DR;
+        return (uint8_t)(DR & 0xff);
     }
 };
+
+
+#endif /* __USART_H__ */

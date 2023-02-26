@@ -1,7 +1,7 @@
 /**
- * @file dma.cpp
+ * @file main.h
  * @author Rohit Nimkar (nehalnimkar@gmail.com)
- * @brief Definitions of non inline functions related to DMA
+ * @brief Header file for the functions used in the main.c source file
  * @version 1.2
  * @date 2022-12-07
  *
@@ -14,7 +14,10 @@
  *
  */
 
-#include <dma.hpp>
+#ifndef __MAIN_H__
 
-
-//  DMA *DMA1 = (DMA *)(DMA::DMA1_BASE);
+#define __MAIN_H__
+int main(void);
+void init_clock(void);
+void init_adc(void);
+#endif

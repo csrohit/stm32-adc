@@ -1,5 +1,5 @@
 /**
- * @file system.hpp
+ * @file system.h
  * @author Rohit Nimkar (nehalnimkar@gmail.com)
  * @brief Declaration of functionality related to global functions
  * @version 1.2
@@ -15,6 +15,7 @@
  */
 
 #include <stm32f1xx.h>
+#include <stdint.h>
 
 #pragma once
 
