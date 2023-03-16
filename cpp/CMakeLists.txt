@@ -24,7 +24,7 @@ set(CMAKE_EXECUTABLE_SUFFIX_CXX ".elf")
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 # Set project name
-project(adc LANGUAGES CXX C ASM)
+project(adc_demo LANGUAGES CXX C)
 set(EXECUTABLE ${CMAKE_PROJECT_NAME})
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -106,6 +106,7 @@ set(CMAKE_CXX_FLAGS_DEBUG
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/gpio)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/usart)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/system)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/rcc)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/adc)
 
 # link libraries with the executable
@@ -114,7 +115,8 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     gpio
     usart
     system
-    lib_adc
+    adc
+    rcc
 )
 
 # add definitions to be passed to compiler

@@ -5,7 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/lib/usart",
-                "${workspaceFolder}/lib/**"
+                "${workspaceFolder}/lib/rcc"
             ],
             "defines": [
                 "STM32F103xB"

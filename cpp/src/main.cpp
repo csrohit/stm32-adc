@@ -22,6 +22,7 @@
 #include <stdint.h>
 #include <stm32f1xx.h>
 #include "usart.h"
+#include "rcc.h"
 
 char msg[28];
 
@@ -42,8 +43,6 @@ void delay(uint32_t ms) {
         __asm("nop");
     }
 }
-
-
 
 /**
  * @brief
@@ -74,20 +73,17 @@ void init_clock(void)
 
 int main(void) {
     
+    /* Initialize clock to 72MHz */
     init_clock();
-    // initialize adc and peripheral clock
-     ADC &adc = *new (ADC::Adc1) ADC;
 
-    /* Set ADC prescalar*/
-    RCC->CFGR |= RCC_CFGR_ADCPRE_DIV6;
+    ADC &adc = *new (ADC::Adc1) ADC;
 
-    /* Enable clock for ADC & PortA */
-    RCC->APB2ENR |= RCC_APB2ENR_ADC1EN | RCC_APB2ENR_IOPAEN;
+    Rcc::setADCPrescalar(Rcc::PCLK2_6);
+
+    GPIO::enable_PortA();
 
     /* COnfigure PA0 in analog input mode */
     GPIOA->CRL &= ~(GPIO_CRL_CNF0 | GPIO_CRL_MODE0);
-
-
 
     // wake from power down mode
     adc.setPowerState(ADC::Enabled);
