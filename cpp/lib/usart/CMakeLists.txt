@@ -2,10 +2,6 @@
 set(LIB_NAME usart)
 add_library(${LIB_NAME} "")
 
-# get_cmake_property(_variableNames VARIABLES) list (SORT _variableNames)
-# foreach (_variableName ${_variableNames}) message(STATUS
-# "${_variableName}=${${_variableName}}") endforeach()
-
 # add sources for library
 target_sources(
   ${LIB_NAME}

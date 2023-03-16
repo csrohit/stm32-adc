@@ -16,7 +16,6 @@ target_include_directories(system
         ${CMAKE_SOURCE_DIR}/include
 )
 
-
 target_compile_definitions(
     system
     PUBLIC
