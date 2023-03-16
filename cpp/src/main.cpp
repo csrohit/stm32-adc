@@ -1,48 +1,28 @@
 /**
- ******************************************************************************
- * @file           : main.cpp
- * @author         : Rohit Nimkar <nehalnimkar@gmail.com>
- *<https://csrohit.github.io>
- * @brief          : Main program body
- ******************************************************************************
+ * @file main.cpp
+ * @author Rohit Nimkar (nehalnimkar@gmail.com) <https://csrohit.github.io>
+ * @brief Main program body
+ * @version 1.2
+ *
+ * @copyright Copyright (c) 2023
  * @attention
  *
- * This software component is licensed by Rohit Nimkar under BSD 3-Clause
- *license, the "License"; You may not use this file except in compliance with
- *the License. You may obtain a copy of the License at:
- *                        opensource.org/licenses/BSD-3-Clause
+ * This software component is licensed by Rohit Nimkar under BSD 3-Clause license,
+ * the "License"; You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at: opensource.org/licenses/BSD-3-Clause
  *
- ******************************************************************************
  */
 
-#include "printf.h"
-#include <adc.h>
-
-#include <gpio.h>
 #include <stdint.h>
-#include <stm32f1xx.h>
+
+#include "printf.h"
+#include "adc.h"
+#include "gpio.h"
+#include "stm32f1xx.h"
 #include "usart.h"
 #include "rcc.h"
 
 char msg[28];
-
-volatile uint32_t msTicks = 0;
-
-extern "C" {
-void SysTick_Handler(void) { msTicks = msTicks + 1; }
-}
-
-/**
- * @brief Add blocking delay
- *
- * @param ms delay in milliseconds
- */
-void delay(uint32_t ms) {
-    uint32_t expected_ticks = msTicks + ms;
-    while (msTicks < expected_ticks) {
-        __asm("nop");
-    }
-}
 
 /**
  * @brief
@@ -87,13 +67,21 @@ int main(void) {
 
     // wake from power down mode
     adc.setPowerState(ADC::Enabled);
+    
+    // set continuous conversion mode
     adc.setContinuousModeState(ADC::Enabled);
+
+    // (optional) set data alignment in data register
     adc.setAlignment(ADC::ALIGN_RIGHT);
     
     /* Set sampling time = 28.5 cycles*/
     adc.setSamplingTime(ADC::Channel0, ADC::Cycles28_5);
+
+    // recaloberate adc for more accurate results
     adc.resetCaliberation();
     adc.caliberate();
+
+    // start ADc conversion
     adc.startConversion();
 
     /* Serial port configuration */
@@ -108,6 +96,6 @@ int main(void) {
         uint16_t adc_value = adc.getData();
         sprintf_(msg, "Digital value: %hu\r\n", adc_value);
         ttl.tx_str(msg);
-        delay(1000);
+        delay_ms(1000);
     }
 }

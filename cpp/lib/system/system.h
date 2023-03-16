@@ -14,8 +14,9 @@
  *
  */
 
-#include <stm32f1xx.h>
 #include <stdint.h>
+
+#include "stm32f1xx.h"
 
 #ifndef SYSTEM_H
 #define SYSTEM_H
