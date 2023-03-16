@@ -84,7 +84,7 @@ set(CXX_FLAGS
     -fno-rtti
     -nostdlib
     # -Wconversion # STM libraries!
-    # -Wno-volatile
+    -Wno-volatile
     # -Wold-style-cast
     # -Wuseless-cast
     # -Wsuggest-override

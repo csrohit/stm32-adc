@@ -91,38 +91,21 @@ int main(void) {
     adc.setAlignment(ADC::ALIGN_RIGHT);
     
     /* Set sampling time = 28.5 cycles*/
-    ADC1->SMPR2 |= (ADC_SMPR2_SMP0_1 | ADC_SMPR2_SMP0_0);
+    adc.setSamplingTime(ADC::Channel0, ADC::Cycles28_5);
+    adc.resetCaliberation();
+    adc.caliberate();
+    adc.startConversion();
 
-    /* Reset Caliberation registers */
-    ADC1->CR2 |= (ADC_CR2_RSTCAL);
-    while (ADC1->CR2 & ADC_CR2_RSTCAL)
-        ;
-
-    /* Start caliberation */
-    ADC1->CR2 |= (ADC_CR2_CAL);
-    while (ADC1->CR2 & ADC_CR2_CAL)
-        ;
-
-    /* Start conversion */
-    ADC1->CR2 |= ADC_CR2_ADON;
-
+    /* Serial port configuration */
     USART &ttl = *new (USART::Usart1) USART;
-
-    //
-    /* Recaliberate ADC for better accuraccy */
-    // adc.resetCaliberation();
-    // adc.caliberate();
-    // adc.caliberate();
-    /* Set sampling time */
-
-    /* Set gpio pin configuration */
-
     ttl.set_baudrate(USART::BR_115200);
     ttl.setTransmitterState(USART::Enabled);
     ttl.setUsartState(USART::Enabled);
+
     SysTick_Config(Core::clock / 1000);
+
     while (1) {
-        uint16_t adc_value = ADC1->DR & 0xffff;
+        uint16_t adc_value = adc.getData();
         sprintf_(msg, "Digital value: %hu\r\n", adc_value);
         ttl.tx_str(msg);
         delay(1000);
