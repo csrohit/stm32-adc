@@ -58,30 +58,36 @@ set(PROJECT_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_executable(${EXECUTABLE}
     src/main.cpp
     src/system_stm32f1xx.c
+    src/printf.c
     ${STARTUP_SCRIPT}
 )
 
 set(C_FLAGS
     ${CPU_PARAMETERS}
-    -Wall
-    -Wextra
-    -Wpedantic
-    -Wshadow
-    -Wdouble-promotion
-    -Wformat=2
-    -Wformat-truncation
-    -Wundef
+    -nostdlib
+    # -fno-tree-loop-distribute-patterns
+    # -Wall
+    # -Wextra
+    # -Wpedantic
+    # -Wshadow
+    # -Wdouble-promotion
+    # -Wformat=2
+    # -Wformat-truncation
+    # -Wundef
     -fno-common
-    -Wno-unused-parameter
+    # -Wno-unused-parameter
 )
 
 set(CXX_FLAGS
     ${C_FLAGS}
-    -Wconversion # STM libraries!
-    -Wno-volatile
+    -fno-exceptions
+    -fno-rtti
+    -nostdlib
+    # -Wconversion # STM libraries!
+    # -Wno-volatile
     # -Wold-style-cast
-    -Wuseless-cast
-    -Wsuggest-override
+    # -Wuseless-cast
+    # -Wsuggest-override
 )
 
 # set c flags with space delimited flags
@@ -100,6 +106,7 @@ set(CMAKE_CXX_FLAGS_DEBUG
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/gpio)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/usart)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/system)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/adc)
 
 # link libraries with the executable
 target_link_libraries(${CMAKE_PROJECT_NAME}
@@ -107,6 +114,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     gpio
     usart
     system
+    lib_adc
 )
 
 # add definitions to be passed to compiler
@@ -127,15 +135,7 @@ target_include_directories(${EXECUTABLE}
 target_link_options(${EXECUTABLE} 
     PRIVATE
         -T${MCU_LINKER_SCRIPT}
-        ${CPU_PARAMETERS}
-        -Wl,-Map=${CMAKE_PROJECT_NAME}.map
-        --specs=nosys.specs
-        -Wl,--start-group
-        -lc
-        -lm
-        -lstdc++
-        -Wl,--end-group
-        -Wl,--print-memory-usage
+        -Wl,-Map=${CMAKE_PROJECT_NAME}.map,--gc-sections,-cref,--print-memory-usage
 )
 
 

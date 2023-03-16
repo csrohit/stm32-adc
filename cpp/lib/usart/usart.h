@@ -13,10 +13,10 @@
  * License. You may obtain a copy of the License at: opensource.org/licenses/BSD-3-Clause
  *
  */
-
-#include <stdlib.h>
+#include <stddef.h>
+#include <stdint.h>
 #include <stm32f1xx.h>
-#include <system.h>
+#include "system.h"
 
 #ifndef __USART_H__
 #define __USART_H__
@@ -220,7 +220,7 @@ public:
         }
         else
         {
-            CR1 |= USART_CR1_M;
+            CR1 &= ~USART_CR1_M;
         }
     }
 

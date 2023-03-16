@@ -17,7 +17,8 @@
 #include <stm32f1xx.h>
 #include <stdint.h>
 
-#pragma once
+#ifndef SYSTEM_H
+#define SYSTEM_H
 
 namespace Core
 {
@@ -33,3 +34,6 @@ static inline void delay_ms(uint32_t ms)
         __asm("nop");
     }
 }
+
+#endif //  SYSTEM_H
+
