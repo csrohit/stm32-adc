@@ -1,5 +1,5 @@
 # specify name of library
-set(LIB_NAME lib_adc)
+set(LIB_NAME adc)
 add_library(${LIB_NAME} "")
 
 # get_cmake_property(_variableNames VARIABLES)
@@ -29,5 +29,4 @@ target_compile_definitions(
     ${MCU_MODEL}
 )
 
-message(STATUS "mcu_model}=${MCU_MODEL}")
 
