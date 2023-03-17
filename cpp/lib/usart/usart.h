@@ -1,9 +1,8 @@
 /**
  * @file usart.h
- * @author Rohit Nimkar (nehalnimkar@gmail.com)
+ * @author Rohit Nimkar (nehalnimkar@gmail.com) <https://csrohit.github.io>
  * @brief Declaration of functionality related to USART
  * @version 1.2
- * @date 2022-12-07
  *
  * @copyright Copyright (c) 2022
  * @attention
@@ -11,11 +10,12 @@
  * This software component is licensed by Rohit Nimkar under BSD 3-Clause license,
  * the "License"; You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at: opensource.org/licenses/BSD-3-Clause
- *
  */
-#include <stddef.h>
+
 #include <stdint.h>
-#include <stm32f1xx.h>
+#include <stddef.h>
+
+#include "stm32f1xx.h"
 #include "system.h"
 
 #ifndef __USART_H__

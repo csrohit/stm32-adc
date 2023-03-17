@@ -17,7 +17,7 @@
 
 #include "printf.h"
 #include "adc.h"
-#include "gpio.h"
+#include "gpio_port.h"
 #include "stm32f1xx.h"
 #include "usart.h"
 #include "rcc.h"
@@ -56,14 +56,14 @@ int main(void) {
     /* Initialize clock to 72MHz */
     init_clock();
 
+    /* Configure PA0 in analog input mode*/
+    GPIO &porta = *new (GPIO::PortA) GPIO;
+    porta.setPinMode(GPIO::PIN_0, GPIO::INPUT);
+    porta.setPinConfig(GPIO::PIN_0, GPIO::INPUT_ANALOG);
+
+    /* Configure ADC1*/
     ADC &adc = *new (ADC::Adc1) ADC;
-
     Rcc::setADCPrescalar(Rcc::PCLK2_6);
-
-    GPIO::enable_PortA();
-
-    /* COnfigure PA0 in analog input mode */
-    GPIOA->CRL &= ~(GPIO_CRL_CNF0 | GPIO_CRL_MODE0);
 
     // wake from power down mode
     adc.setPowerState(ADC::Enabled);
