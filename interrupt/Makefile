@@ -56,7 +56,7 @@ ASFLAGS		+= $(OPT)
 endif
 
 # Do not link stdlib with executable
-CFLAGS		+= -nostdlib -fno-tree-loop-distribute-patterns -fdata-sections -ffunction-sections
+CFLAGS		+= -nostdlib -fdata-sections -ffunction-sections
 CXXFLAGS	+= -nostdlib -fno-tree-loop-distribute-patterns -fdata-sections -ffunction-sections -fno-exceptions -fno-rtti
 LDFLAGS		+= -nostdlib 
 
